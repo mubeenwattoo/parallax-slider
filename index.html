@@ -32,19 +32,36 @@
     position:relative;
     display:grid;
     grid-template-columns: 1fr 1.2fr;
-    min-height:100vh;
   }
   /* stretch the section height to number of slides */
-  .split[data-slides="3"]{ height: calc(100vh * 3); }
+  .split[data-slides="3"]{ height: calc(100vh * 2); }
   .split[data-slides="2"]{ height: calc(100vh * 2); }
   .split[data-slides="4"]{ height: calc(100vh * 4); } /* if you add more later */
 
   @media (max-width: 900px){
     .split{grid-template-columns:1fr}
+    .left{
+      height: 80vh;
+      margin-top: -5rem;
+    }
+     .left .pin{
+    height:30vh !important;
+
+    
+  }
+  .slide{
+   padding: 0 20px;
+  }
+  .right{
+    margin-top: -60rem ;
+
+  }
   }
 
   /* LEFT: sticky dark panel */
-  .left{background:var(--ink); position:relative;}
+  .left{background:var(--ink); position:relative; 
+    z-index: 1;
+  }
   .left .pin{
     position:sticky; top:0; height:100vh;
     display:flex; align-items:center; padding:4vw;
@@ -69,9 +86,11 @@
   /* RIGHT: sticky viewport + sliding track */
   .right{
     position:relative; background:var(--blue);
+    z-index: 10;
+
   }
   .right .viewport{
-    position:sticky; top:0; height:100vh; overflow:hidden;
+    position:sticky; top:0; height:120vh; overflow:hidden;
     padding:72px clamp(24px, 4vw, 56px);
   }
   .right .track{
