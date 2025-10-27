@@ -3,148 +3,121 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Parallax Split Section</title>
+<title>Parallax Split – 3 Vertical Slides</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --blue:#2C8CF8;         /* match the design's blue */
-    --ink:#171717;          /* dark panel */
-    --ink-2:#000000;        /* arrow pill */
-    --text:#eaeaea;
-    --muted:#9fbef5;
+    --blue:#2C8CF8;
+    --ink:#171717;
+    --ink-2:#000000;
+    --text:#ffffff;
+    --muted:#0f1b33;
+    --line:#0f1b33;
     --maxw:1200px;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-    color:#fff;
-    background:#0b0b0b;
-    line-height:1.4;
+    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    background:#0b0b0b; color:var(--text); line-height:1.4;
   }
 
-  /* Page scaffold so we can scroll */
-  .spacer{height:60vh;background:#0b0b0b;}      
-  .outro{height:80vh;background:#0b0b0b;}       
+  /* Optional space above/below the feature */
+  .spacer{height:40vh}
+  .outro{height:60vh}
 
-  /* Split section */
+  /* ===== Split Section (now spans N viewheights for N slides) ===== */
   .split{
     position:relative;
     display:grid;
     grid-template-columns: 1fr 1.2fr;
     min-height:100vh;
   }
+  /* stretch the section height to number of slides */
+  .split[data-slides="3"]{ height: calc(100vh * 3); }
+  .split[data-slides="2"]{ height: calc(100vh * 2); }
+  .split[data-slides="4"]{ height: calc(100vh * 4); } /* if you add more later */
+
   @media (max-width: 900px){
     .split{grid-template-columns:1fr}
   }
 
-  /* Left (dark) panel */
-  .left{
-    background:var(--ink);
-    position:relative;
-  }
-  /* Keep the left text pinned while scrolling */
+  /* LEFT: sticky dark panel */
+  .left{background:var(--ink); position:relative;}
   .left .pin{
-    position:sticky;
-    top:0;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    padding:4vw;
+    position:sticky; top:0; height:100vh;
+    display:flex; align-items:center; padding:4vw;
   }
   .hero-title{
-    font-weight:700;
-    font-size: clamp(40px, 7vw, 92px);
-    letter-spacing:0.02em;
-    color:#fff;
-    line-height:1.35;
-    margin:0;
+    margin:0; color:#fff; font-weight:700;
+    font-size: clamp(40px, 7vw, 92px); letter-spacing: .02em; line-height:1.35;
   }
-  /* Down arrow pill */
   .arrow-pill{
-    position:absolute; right:10%;
-    bottom:72px; transform:translateX(-50%);
-    width:35px; height:92px; border-radius:999px;
-    background:var(--ink-2);
+    position:absolute; right:10%; bottom:72px; transform:translateX(-50%);
+    width:35px; height:92px; border-radius:999px; background:var(--ink-2);
     display:flex; align-items:center; justify-content:center;
-    
   }
-  .arrow-pill:hover{
-    background: #0c0c0c;
-    transition: all 0.3s ease;
-  }
-  .arrow{
-    width:2px; height:56px; background:#4cc3ff; position:relative;
-  }
-
+  .arrow-pill:hover{ background:#0c0c0c; transition:all .3s ease; }
+  .arrow{ width:2px; height:56px; background:#4cc3ff; position:relative; }
   .arrow:after{
     content:""; position:absolute; bottom:-4px; left:50%;
     width:8px; height:8px; border-bottom:2px solid #4cc3ff; border-right:2px solid #4cc3ff;
     transform:translateX(-50%) rotate(45deg);
   }
 
-  /* Right (blue) panel */
+  /* RIGHT: sticky viewport + sliding track */
   .right{
-    background:var(--blue);
-    padding:72px clamp(24px, 4vw, 56px);
-    overflow:visible;
+    position:relative; background:var(--blue);
   }
-  .right .inner{
-    max-width:var(--maxw);
-    margin-inline:auto;
+  .right .viewport{
+    position:sticky; top:0; height:100vh; overflow:hidden;
+    padding:72px clamp(24px, 4vw, 56px);
+  }
+  .right .track{
+    position:absolute; inset:0;
+    display:block; will-change:transform;
   }
 
-  /* Typography & layout inside blue panel */
-  .eyebrow{
-    color: #0f1b33;
-    max-width:42ch;
-    font-size:16px;
-    margin:0 0 26px;
+  /* Each slide fills the viewport */
+  .slide{
+    height:100vh; display:flex; align-items:flex-start;
   }
-  .section-title{
-    margin:0 0 22px;
-    font-weight:600;
-    font-size: clamp(22px, 2.6vw, 32px);
-  }
-  .list{
-    margin:22px 0 36px;
-    padding:0; list-style:none;
-    max-width:520px;
-  }
-  .list li{
-    padding:16px 0;
-    border-bottom:1px solid #0f1b33;
-    color:#0f1b33;              
-    font-weight:500;
-    background:transparent;
-  }
+  .slide .inner{ max-width:var(--maxw); margin-inline:auto; }
+  .eyebrow{ color:var(--muted); max-width:52ch; font-size:16px; margin:0 0 26px; }
+  .section-title{ margin:0 0 22px; font-weight:600; font-size: clamp(22px, 2.6vw, 32px); }
+  .list{ margin:22px 0 36px; padding:0; list-style:none; max-width:520px; }
+  .list li{ padding:16px 0; border-bottom:1px solid var(--line); color:var(--muted); font-weight:500; }
   .btn{
-    display:inline-block;
-    padding:12px 20px;
-    border-radius:999px;
-    background:#111;
-    color:#fff; text-decoration:none; font-weight:600; font-size:12px;
+    display:inline-block; padding:12px 20px; border-radius:999px;
+    background:#111; color:#fff; text-decoration:none; font-weight:600; font-size:12px;
     border:1px solid rgba(255,255,255,.08);
   }
-  .btn:focus-visible{outline:3px solid rgba(255,255,255,.5); outline-offset:3px}
 
-  /* Parallax helpers */
-  .parallax{
-    will-change: transform;
-    transform: translate3d(0,0,0);
+  /* Parallax-on-elements helper */
+  .parallax{ will-change: transform; transform:translate3d(0,0,0); }
+
+  /* Small spacing rhythm inside slides */
+  .stack > * + *{ margin-top:min(4.5vh, 36px); }
+
+  /* Optional slide indicators (right edge) */
+  .dots{
+    position:absolute; right:24px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; pointer-events:none;
   }
-  /* Give vertical breathing room so we can see the parallax work */
-  .stack > * + *{ margin-top: min(4.5vh, 36px); }
+  .dot{
+    width:8px; height:8px; border-radius:999px; opacity:.35; background:#fff; transition:opacity .2s, transform .2s;
+  }
+  .dot.active{ opacity:1; transform:scale(1.2); }
 </style>
 </head>
 <body>
 
   <div class="spacer"></div>
 
-  <section class="split" aria-label="What we do best">
-    <!-- LEFT: sticky dark panel -->
+  <!-- data-slides controls how many vertical slides the blue side will show -->
+  <section class="split" data-slides="3" aria-label="What we do best">
+    <!-- LEFT -->
     <aside class="left">
       <div class="pin">
         <h1 class="hero-title">What<br/>We Do<br/>Best</h1>
@@ -152,28 +125,75 @@
       </div>
     </aside>
 
-    <!-- RIGHT: blue panel with parallax content -->
+    <!-- RIGHT -->
     <div class="right">
-      <div class="inner stack">
-        <p class="eyebrow parallax" data-speed="0.18">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+      <div class="viewport">
+        <!-- track moves up as you scroll through the section -->
+        <div class="track" id="track">
+          <!-- Slide 1 -->
+          <section class="slide">
+            <div class="inner stack">
+              <p class="eyebrow parallax" data-speed="0.18">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+              </p>
+              <h2 class="section-title parallax" data-speed="0.12">Lorem Ipsum — One</h2>
+              <ul class="list parallax" data-speed="0.25">
+                <li>Discovery & Strategy</li>
+                <li>Brand Systems</li>
+                <li>Design Sprints</li>
+                <li>User Research</li>
+                <li>Wireframes</li>
+                <li>Prototyping</li>
+              </ul>
+              <a class="btn parallax" data-speed="0.35" href="#">LEARN MORE</a>
+            </div>
+          </section>
 
-        <h2 class="section-title parallax" data-speed="0.12">Lorem Ipsum</h2>
+          <!-- Slide 2 -->
+          <section class="slide">
+            <div class="inner stack">
+              <p class="eyebrow parallax" data-speed="0.18">
+                Dolor sit amet: product design focused on outcomes with clean systems.
+              </p>
+              <h2 class="section-title parallax" data-speed="0.12">Lorem Ipsum — Two</h2>
+              <ul class="list parallax" data-speed="0.25">
+                <li>UI Design</li>
+                <li>Design Systems</li>
+                <li>Accessibility</li>
+                <li>Animation & Motion</li>
+                <li>Component Libraries</li>
+                <li>Design QA</li>
+              </ul>
+              <a class="btn parallax" data-speed="0.35" href="#">OUR WORK</a>
+            </div>
+          </section>
 
-        <ul class="list parallax" data-speed="0.25">
-          <li>Lorem Ipsum</li>
-          <li>Lorem Ipsum</li>
-          <li>Lorem Ipsum</li>
-          <li>Lorem Ipsum</li>
-          <li>Lorem Ipsum</li>
-          <li>Lorem Ipsum</li>
-        </ul>
+          <!-- Slide 3 -->
+          <section class="slide">
+            <div class="inner stack">
+              <p class="eyebrow parallax" data-speed="0.18">
+                Deployment, optimization, and iteration—ship, measure, improve.
+              </p>
+              <h2 class="section-title parallax" data-speed="0.12">Lorem Ipsum — Three</h2>
+              <ul class="list parallax" data-speed="0.25">
+                <li>Frontend Engineering</li>
+                <li>CMS & Content</li>
+                <li>Performance</li>
+                <li>SEO Basics</li>
+                <li>Analytics</li>
+                <li>Growth Experiments</li>
+              </ul>
+              <a class="btn parallax" data-speed="0.35" href="#">GET STARTED</a>
+            </div>
+          </section>
+        </div>
 
-        <a href="#" class="btn parallax" data-speed="0.35">LEARN MORE</a>
-
-        <!-- Extra filler to make the panel tall so scrolling feels natural -->
-        <div style="height:28vh"></div>
+        <!-- dots (optional) -->
+        <div class="dots" aria-hidden="true">
+          <span class="dot" data-dot="0"></span>
+          <span class="dot" data-dot="1"></span>
+          <span class="dot" data-dot="2"></span>
+        </div>
       </div>
     </div>
   </section>
@@ -181,42 +201,91 @@
   <div class="outro"></div>
 
 <script>
-  // Tiny requestAnimationFrame parallax engine.
-  // Elements with [data-speed] move at that multiplier relative to scroll.
-  (function(){
-    const items = Array.from(document.querySelectorAll('[data-speed]'));
-    if(!items.length) return;
+/* =======================
+   1) Track translation = vertical slider
+   Section has height = slides * 100vh.
+   The blue viewport is sticky (100vh). While scrolling across the section,
+   we translate the .track upward from 0 to -(slides-1)*100vh.
+======================= */
+(function(){
+  const section = document.querySelector('.split');
+  const track   = document.getElementById('track');
+  if(!section || !track) return;
 
-    let ticking = false;
+  const slides = track.querySelectorAll('.slide');
+  const dots   = Array.from(document.querySelectorAll('.dot'));
+  const slideCount = Math.max(1, Number(section.dataset.slides) || slides.length);
 
-    function onScroll(){
-      if(!ticking){
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
+  let ticking = false;
+
+  function clamp(n,min,max){ return Math.min(Math.max(n,min),max); }
+
+  function updateSlider(){
+    const vh = window.innerHeight;
+    const secTop = section.offsetTop;
+    const secHeight = section.offsetHeight;               // e.g. 300vh
+    const maxScroll = secHeight - vh;                     // distance while section is in view
+    const pageY = window.scrollY || window.pageYOffset;
+
+    // progress from 0 → 1 across the section
+    const raw = (pageY - secTop) / maxScroll;
+    const progress = clamp(raw, 0, 1);
+
+    // translate track from 0 → -(slides-1)*vh
+    const y = -progress * (slideCount - 1) * vh;
+    track.style.transform = `translate3d(0, ${y}px, 0)`;
+
+    // activate dot
+    const activeIndex = Math.round(progress * (slideCount - 1));
+    dots.forEach((d,i)=> d.classList.toggle('active', i === activeIndex) );
+
+    ticking = false;
+  }
+
+  function onScroll(){
+    if(!ticking){
+      requestAnimationFrame(updateSlider);
+      ticking = true;
     }
-    function update(){
-      const scrollY = window.scrollY || window.pageYOffset;
-      const vh = window.innerHeight;
+  }
+  updateSlider();
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', updateSlider);
+})();
 
-      items.forEach(el=>{
-        // Calculate local progress based on element position (keeps motion subtle)
-        const rect = el.getBoundingClientRect();
-        const centerOffset = (rect.top + rect.height*0.5) - vh*0.5;
-        const speed = parseFloat(el.dataset.speed) || 0.2;
+/* =======================
+   2) Subtle per-element parallax
+   (same approach you already had; works inside each slide)
+======================= */
+(function(){
+  const items = Array.from(document.querySelectorAll('[data-speed]'));
+  if(!items.length) return;
 
-        // Translate a fraction of the distance from viewport center
-        const y = -centerOffset * speed;
-        el.style.transform = `translate3d(0, ${y}px, 0)`;
-      });
+  let ticking = false;
 
-      ticking = false;
+  function update(){
+    const vh = window.innerHeight;
+    items.forEach(el=>{
+      const rect = el.getBoundingClientRect();
+      const centerOffset = (rect.top + rect.height*0.5) - vh*0.5;
+      const speed = parseFloat(el.dataset.speed) || 0.2;
+      const y = -centerOffset * speed;
+      el.style.transform = `translate3d(0, ${y}px, 0)`;
+    });
+    ticking = false;
+  }
+
+  function onScroll(){
+    if(!ticking){
+      requestAnimationFrame(update);
+      ticking = true;
     }
+  }
 
-    update();           // initial position
-    window.addEventListener('scroll', onScroll, {passive:true});
-    window.addEventListener('resize', update);
-  })();
+  update();
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', update);
+})();
 </script>
 </body>
 </html>
