@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Parallax Split Section</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2C8CF8;         /* match the design's blue */
+    --ink:#171717;          /* dark panel */
+    --ink-2:#000000;        /* arrow pill */
+    --text:#eaeaea;
+    --muted:#9fbef5;
+    --maxw:1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    color:#fff;
+    background:#0b0b0b;
+    line-height:1.4;
+  }
+
+  /* Page scaffold so we can scroll */
+  .spacer{height:60vh;background:#0b0b0b;}      
+  .outro{height:80vh;background:#0b0b0b;}       
+
+  /* Split section */
+  .split{
+    position:relative;
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    min-height:100vh;
+  }
+  @media (max-width: 900px){
+    .split{grid-template-columns:1fr}
+  }
+
+  /* Left (dark) panel */
+  .left{
+    background:var(--ink);
+    position:relative;
+  }
+  /* Keep the left text pinned while scrolling */
+  .left .pin{
+    position:sticky;
+    top:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    padding:4vw;
+  }
+  .hero-title{
+    font-weight:700;
+    font-size: clamp(40px, 7vw, 92px);
+    letter-spacing:0.02em;
+    color:#fff;
+    line-height:1.35;
+    margin:0;
+  }
+  /* Down arrow pill */
+  .arrow-pill{
+    position:absolute; right:10%;
+    bottom:72px; transform:translateX(-50%);
+    width:35px; height:92px; border-radius:999px;
+    background:var(--ink-2);
+    display:flex; align-items:center; justify-content:center;
+    
+  }
+  .arrow-pill:hover{
+    background: #0c0c0c;
+    transition: all 0.3s ease;
+  }
+  .arrow{
+    width:2px; height:56px; background:#4cc3ff; position:relative;
+  }
+
+  .arrow:after{
+    content:""; position:absolute; bottom:-4px; left:50%;
+    width:8px; height:8px; border-bottom:2px solid #4cc3ff; border-right:2px solid #4cc3ff;
+    transform:translateX(-50%) rotate(45deg);
+  }
+
+  /* Right (blue) panel */
+  .right{
+    background:var(--blue);
+    padding:72px clamp(24px, 4vw, 56px);
+    overflow:visible;
+  }
+  .right .inner{
+    max-width:var(--maxw);
+    margin-inline:auto;
+  }
+
+  /* Typography & layout inside blue panel */
+  .eyebrow{
+    color: #0f1b33;
+    max-width:42ch;
+    font-size:16px;
+    margin:0 0 26px;
+  }
+  .section-title{
+    margin:0 0 22px;
+    font-weight:600;
+    font-size: clamp(22px, 2.6vw, 32px);
+  }
+  .list{
+    margin:22px 0 36px;
+    padding:0; list-style:none;
+    max-width:520px;
+  }
+  .list li{
+    padding:16px 0;
+    border-bottom:1px solid #0f1b33;
+    color:#0f1b33;              
+    font-weight:500;
+    background:transparent;
+  }
+  .btn{
+    display:inline-block;
+    padding:12px 20px;
+    border-radius:999px;
+    background:#111;
+    color:#fff; text-decoration:none; font-weight:600; font-size:12px;
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .btn:focus-visible{outline:3px solid rgba(255,255,255,.5); outline-offset:3px}
+
+  /* Parallax helpers */
+  .parallax{
+    will-change: transform;
+    transform: translate3d(0,0,0);
+  }
+  /* Give vertical breathing room so we can see the parallax work */
+  .stack > * + *{ margin-top: min(4.5vh, 36px); }
+</style>
+</head>
+<body>
+
+  <div class="spacer"></div>
+
+  <section class="split" aria-label="What we do best">
+    <!-- LEFT: sticky dark panel -->
+    <aside class="left">
+      <div class="pin">
+        <h1 class="hero-title">What<br/>We Do<br/>Best</h1>
+        <div class="arrow-pill" aria-hidden="true"><div class="arrow"></div></div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: blue panel with parallax content -->
+    <div class="right">
+      <div class="inner stack">
+        <p class="eyebrow parallax" data-speed="0.18">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+
+        <h2 class="section-title parallax" data-speed="0.12">Lorem Ipsum</h2>
+
+        <ul class="list parallax" data-speed="0.25">
+          <li>Lorem Ipsum</li>
+          <li>Lorem Ipsum</li>
+          <li>Lorem Ipsum</li>
+          <li>Lorem Ipsum</li>
+          <li>Lorem Ipsum</li>
+          <li>Lorem Ipsum</li>
+        </ul>
+
+        <a href="#" class="btn parallax" data-speed="0.35">LEARN MORE</a>
+
+        <!-- Extra filler to make the panel tall so scrolling feels natural -->
+        <div style="height:28vh"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="outro"></div>
+
+<script>
+  // Tiny requestAnimationFrame parallax engine.
+  // Elements with [data-speed] move at that multiplier relative to scroll.
+  (function(){
+    const items = Array.from(document.querySelectorAll('[data-speed]'));
+    if(!items.length) return;
+
+    let ticking = false;
+
+    function onScroll(){
+      if(!ticking){
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+    function update(){
+      const scrollY = window.scrollY || window.pageYOffset;
+      const vh = window.innerHeight;
+
+      items.forEach(el=>{
+        // Calculate local progress based on element position (keeps motion subtle)
+        const rect = el.getBoundingClientRect();
+        const centerOffset = (rect.top + rect.height*0.5) - vh*0.5;
+        const speed = parseFloat(el.dataset.speed) || 0.2;
+
+        // Translate a fraction of the distance from viewport center
+        const y = -centerOffset * speed;
+        el.style.transform = `translate3d(0, ${y}px, 0)`;
+      });
+
+      ticking = false;
+    }
+
+    update();           // initial position
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', update);
+  })();
+</script>
+</body>
+</html>
