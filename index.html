@@ -37,6 +37,9 @@
   .split[data-slides="3"]{ height: calc(100vh * 2); }
   .split[data-slides="2"]{ height: calc(100vh * 2); }
   .split[data-slides="4"]{ height: calc(100vh * 4); } /* if you add more later */
+.slide-1{
+  margin-top: 20rem;
+}
 
   @media (max-width: 900px){
     .split{grid-template-columns:1fr}
@@ -49,6 +52,13 @@
 
     
   }
+   .right .viewport{
+     height:100vh !important; 
+    
+  }
+  .slide-1{
+  margin-top: 0;
+}
   .slide{
    padding: 0 20px;
   }
@@ -90,7 +100,7 @@
 
   }
   .right .viewport{
-    position:sticky; top:0; height:120vh; overflow:hidden;
+    position:sticky; top:0; height:150vh; overflow:hidden;
     padding:72px clamp(24px, 4vw, 56px);
   }
   .right .track{
@@ -150,7 +160,7 @@
         <!-- track moves up as you scroll through the section -->
         <div class="track" id="track">
           <!-- Slide 1 -->
-          <section class="slide">
+          <section class="slide slide-1">
             <div class="inner stack">
               <p class="eyebrow parallax" data-speed="0.18">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
@@ -188,7 +198,7 @@
           </section>
 
           <!-- Slide 3 -->
-          <section class="slide">
+          <section class="slide slide-3">
             <div class="inner stack">
               <p class="eyebrow parallax" data-speed="0.18">
                 Deployment, optimization, and iteration—ship, measure, improve.
